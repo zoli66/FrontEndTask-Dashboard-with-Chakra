@@ -1,17 +1,17 @@
-import { Provider } from "react-redux";
 import "./App.css";
 import LoginPage from "./pages/auth/LoginPage";
-import { store } from "./store/store";
 import UsersPage from "./pages/users/UsersPage";
+import { Route, Routes } from "react-router-dom";
+import DashboardLayout from "./layout/DashboardLayout";
 
 function App() {
   return (
-    <>
-      <Provider store={store}>
-        <LoginPage />
-        <UsersPage />
-      </Provider>
-    </>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<DashboardLayout />}>
+        <Route path="users" element={<UsersPage />} />
+      </Route>
+    </Routes>
   );
 }
 
