@@ -10,7 +10,7 @@ function DashboardLayout() {
       <Sidebar />
 
       {/*Main Content*/}
-      <Box flex="1" ml="200px" bg="gray.50" minH="100vh">
+      <Box flex="1" bg="gray.50" minH="100vh">
         <Header />
         <Box p={6}>
           <Outlet />
