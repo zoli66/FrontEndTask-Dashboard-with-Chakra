@@ -1,7 +1,8 @@
-import { baseApi } from "./api/baseApi";
+import { baseApi } from "./baseApi";
+import type { Product } from "../../types/product";
 
 interface ProductsResponse {
-    products: any[];
+    products: Product[];
     total: number;
 }
 

@@ -31,15 +31,15 @@ function LoginPage() {
   async function onSubmit(data: LoginFormValues) {
     try {
       const res = await login(data).unwrap();
-      const { token, ...user } = res;
-      dispatch(setCredentials({ user, token }));
+      const { accessToken, ...user } = res;
+      dispatch(setCredentials({ user, token: accessToken }));
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", JSON.stringify([accessToken, user]));
+
       navigate("/");
     } catch (error) {
       console.error(error);
     }
-    console.log(data);
   }
 
   return (

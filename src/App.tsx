@@ -5,6 +5,9 @@ import { Route, Routes } from "react-router-dom";
 import DashboardPage from "./pages/dashboard/DashboardPage";
 import DashboardLayout from "./layout/DashboardLayout";
 import PrivateRoute from "./PrivateRoute";
+import ProductsPage from "./pages/products/productList/ProductsPage";
+import ProductPage from "./pages/products/product/ProductPage";
+import UserPage from "./pages/users/user/UserPage";
 
 function App() {
   return (
@@ -14,6 +17,9 @@ function App() {
         <Route path="/" element={<DashboardLayout />}>
           <Route path="/" element={<DashboardPage />} />
           <Route path="users" element={<UsersPage />} />
+          <Route path="user" element={<UserPage />} />
+          <Route path="products" element={<ProductsPage />} />
+          <Route path="product" element={<ProductPage />} />
         </Route>
       </Route>
     </Routes>

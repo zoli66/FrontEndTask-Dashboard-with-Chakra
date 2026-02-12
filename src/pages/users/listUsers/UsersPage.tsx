@@ -6,6 +6,7 @@ import {
 } from "../../../services/api/usersApi";
 import { userColumnRender } from "./userColumnRenderer";
 import type { User } from "../../../types/user";
+import AddFavButton from "../../../components/ui/AddFavButton";
 
 function UsersPage() {
   const { data, isLoading } = useGetUsersQuery({ limit: 10, skip: 0 });
@@ -29,6 +30,7 @@ function UsersPage() {
 
   return (
     <>
+      <AddFavButton to="/user" />
       {data && (
         <DataTable
           data={data.users}

@@ -3,7 +3,7 @@ import { FiUsers, FiBox, FiDollarSign } from "react-icons/fi";
 import StatsCard from "./components/StatsCard";
 import DashboardChart from "./components/DashboardChart";
 import { useGetUsersQuery } from "../../services/api/usersApi";
-import { useGetProductsQuery } from "../../services/productsApi";
+import { useGetProductsQuery } from "../../services/api/productsApi";
 
 function DashboardPage() {
   const { data: usersData, isLoading: usersLoading } = useGetUsersQuery({});
