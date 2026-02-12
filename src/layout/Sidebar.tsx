@@ -8,7 +8,7 @@ function Sidebar() {
         Admin Panel
       </Text>
       <VStack align="stretch" gap={2}>
-        <Link to="/dashboard" style={{ textDecoration: "none" }}>
+        <Link to="/" style={{ textDecoration: "none" }}>
           <Box px={3} py={2} _hover={{ bg: "gray.700" }} borderRadius="md">
             Dashboard
           </Box>

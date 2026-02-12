@@ -1,10 +1,12 @@
 import { Avatar, Button, Flex, HStack, Text } from "@chakra-ui/react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logout } from "../store/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
+  const navigate = useNavigate();
 
   return (
     <Flex
@@ -32,7 +34,15 @@ function Header() {
             <Avatar.Image src={user.image} />
           </Avatar.Root>
         )}
-        <Button colorScheme="red" size="sm" onClick={() => dispatch(logout())}>
+        <Button
+          colorScheme="red"
+          size="sm"
+          onClick={() => {
+            dispatch(logout());
+            localStorage.removeItem("token");
+            navigate("/login");
+          }}
+        >
           Logout
         </Button>
       </HStack>

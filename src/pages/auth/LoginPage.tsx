@@ -13,10 +13,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "../../services/api/authApi";
 import { useAppDispatch } from "../../store/hooks";
 import { setCredentials } from "../../store/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -32,7 +34,8 @@ function LoginPage() {
       const { token, ...user } = res;
       dispatch(setCredentials({ user, token }));
 
-      console.log("Login success...");
+      localStorage.setItem("token", token);
+      navigate("/");
     } catch (error) {
       console.error(error);
     }

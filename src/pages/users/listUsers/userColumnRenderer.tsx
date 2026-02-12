@@ -1,6 +1,6 @@
 import { MdDelete } from "react-icons/md";
-import type { RenderType } from "../../components/common/DataTable/DataTable";
-import type { User } from "../../types/user";
+import type { RenderType } from "../../../components/common/DataTable/DataTable";
+import type { User } from "../../../types/user";
 import { Flex, Icon } from "@chakra-ui/react";
 import { FaEdit } from "react-icons/fa";
 

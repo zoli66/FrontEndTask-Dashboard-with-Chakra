@@ -1,11 +1,11 @@
 import { useState } from "react";
-import DataTable from "../../components/common/DataTable/DataTable";
+import DataTable from "../../../components/common/DataTable/DataTable";
 import {
   useDeleteUserMutation,
   useGetUsersQuery,
-} from "../../services/api/usersApi";
+} from "../../../services/api/usersApi";
 import { userColumnRender } from "./userColumnRenderer";
-import type { User } from "../../types/user";
+import type { User } from "../../../types/user";
 
 function UsersPage() {
   const { data, isLoading } = useGetUsersQuery({ limit: 10, skip: 0 });
