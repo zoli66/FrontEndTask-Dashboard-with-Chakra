@@ -18,25 +18,6 @@ type Propstype<T> = {
 const DataTable = <T extends { id: number }>(props: Propstype<T>) => {
   const { data, render, actions, columns, onRowClick } = props;
   return (
-    // <div>
-    //   {columns?.map((colKey) => (
-    //     <span key={colKey}>{colKey}</span>
-    //   ))}
-    //   {data.map((item) => (
-    //     //<div> {item.name} - {item.price} </div>
-    //     //<div>{Object.keys(item).map((colKey) => <span>item[colKey]</span>)}</div>
-    //     <div onClick={() => onRowClick && onRowClick(item)}>
-    //       {columns?.map((colKey) => {
-    //         const renderFunc = columnRender[colKey];
-    //         return (
-    //           <span>
-    //             {renderFunc ? renderFunc(item, actions) : item[colKey]}
-    //           </span>
-    //         );
-    //       })}
-    //     </div>
-    //   ))}
-    // </div>
     <Table.Root>
       <Table.Header>
         <Table.Row>

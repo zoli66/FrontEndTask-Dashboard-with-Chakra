@@ -3,16 +3,19 @@ import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { setCredentials } from "./store/slices/authSlice";
 
 function PrivateRoute() {
-  const [accessToken, user] = JSON.parse(
-    localStorage.getItem("token") || "null",
-  );
+  const tokenData = localStorage.getItem("token");
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state) => state.auth.user);
-  if (accessToken && !currentUser) {
-    dispatch(setCredentials({ user, token: accessToken }));
+  if (tokenData) {
+    const [accessToken, user] = JSON.parse(tokenData);
+
+    if (!currentUser) {
+      dispatch(setCredentials({ user, token: accessToken }));
+    }
+    return <Outlet />;
   }
 
-  return accessToken ? <Outlet /> : <Navigate to="/login" />;
+  return <Navigate to="/login" />;
 }
 
 export default PrivateRoute;

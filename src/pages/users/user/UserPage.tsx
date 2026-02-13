@@ -1,115 +1,92 @@
-import { useState } from "react";
-import type { User } from "../../../types/user";
+import { FormSchema, type UserFormValues } from "../../../types/user";
 import { useCreateUserMutation } from "../../../services/api/usersApi";
 import {
   Box,
   Button,
-  FieldLabel,
-  FieldRoot,
+  Field,
   Heading,
   Input,
   NativeSelect,
   Stack,
 } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function UserPage() {
-  const [user, setUser] = useState<User>({
-    id: 0,
-    username: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    gender: "",
-    image: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    resetField,
+  } = useForm<UserFormValues>({
+    resolver: zodResolver(FormSchema),
   });
-  const [createUser] = useCreateUserMutation();
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    const { name, value, type } = e.target;
-    setUser((prev: User) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
-  const handleSubmit = () => {
-    const dto: Omit<User, "id"> = {
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      gender: user.gender,
-      image: user.image,
-    };
-    const res = createUser(dto);
-    console.log(res);
+  const [createUser, { isLoading }] = useCreateUserMutation();
+
+  const onSubmit = async (data: UserFormValues) => {
+    try {
+      const res = await createUser(data).unwrap();
+      resetField("firstName");
+      resetField("lastName");
+      resetField("username");
+      resetField("email");
+      resetField("gender");
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <Box maxW="500px" mx="auto" mt={10} p={6} boxShadow="lg" borderRadius="lg">
       <Heading mb={6}>ثبت کاربر</Heading>
-      <Stack gap={4}>
-        {/* Name */}
-        <FieldRoot>
-          <FieldLabel>نام</FieldLabel>
-          <Input
-            name="firstName"
-            value={user.firstName}
-            onChange={handleChange}
-          />
-        </FieldRoot>
-        {/* Last Name */}
-        <FieldRoot>
-          <FieldLabel>نام خانوادگی</FieldLabel>
-          <Input
-            name="lastName"
-            value={user.lastName}
-            onChange={handleChange}
-          />
-        </FieldRoot>
-        {/* Username */}
-        <FieldRoot>
-          <FieldLabel>نام کاربری</FieldLabel>
-          <Input
-            name="username"
-            value={user.username}
-            onChange={handleChange}
-          />
-        </FieldRoot>
-        {/* Email */}
-        <FieldRoot>
-          <FieldLabel>ایمیل</FieldLabel>
-          <Input
-            name="email"
-            type="email"
-            value={user.email}
-            placeholder="you@example.com"
-            onChange={handleChange}
-          />
-        </FieldRoot>
-        {/* Gender */}
-        <FieldRoot>
-          <FieldLabel>جنسیت</FieldLabel>
-          <NativeSelect.Root>
-            <NativeSelect.Field
-              placeholder="انتخاب جنسیت"
-              value={user.gender}
-              name="gender"
-              onChange={handleChange}
-            >
-              <option value="male">مرد</option>
-              <option value="female">زن</option>
-            </NativeSelect.Field>
-            <NativeSelect.Indicator />
-          </NativeSelect.Root>
-        </FieldRoot>
-        <Button colorPalette="blue" onClick={handleSubmit}>
-          ثبت کاربر
-        </Button>
-      </Stack>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack gap={4}>
+          {/* Name */}
+          <Field.Root invalid={!!errors.firstName}>
+            <Field.Label>نام</Field.Label>
+            <Input {...register("firstName")} />
+            <Field.ErrorText>{errors.firstName?.message}</Field.ErrorText>
+          </Field.Root>
+          {/* Last Name */}
+          <Field.Root invalid={!!errors.lastName}>
+            <Field.Label>نام خانوادگی</Field.Label>
+            <Input {...register("lastName")} />
+            <Field.ErrorText>{errors.lastName?.message}</Field.ErrorText>
+          </Field.Root>
+          {/* Username */}
+          <Field.Root invalid={!!errors.username}>
+            <Field.Label>نام کاربری</Field.Label>
+            <Input {...register("username")} />
+            <Field.ErrorText>{errors.username?.message}</Field.ErrorText>
+          </Field.Root>
+          {/* Email */}
+          <Field.Root invalid={!!errors.email}>
+            <Field.Label>ایمیل</Field.Label>
+            <Input placeholder="you@example.com" {...register("email")} />
+            <Field.ErrorText>{errors.email?.message}</Field.ErrorText>
+          </Field.Root>
+          {/* Gender */}
+          <Field.Root invalid={!!errors.gender}>
+            <Field.Label>جنسیت</Field.Label>
+            <NativeSelect.Root>
+              <NativeSelect.Field
+                placeholder="انتخاب جنسیت"
+                {...register("gender")}
+              >
+                <option value="male">مرد</option>
+                <option value="female">زن</option>
+              </NativeSelect.Field>
+              <NativeSelect.Indicator />
+            </NativeSelect.Root>
+            <Field.ErrorText>{errors.gender?.message}</Field.ErrorText>
+          </Field.Root>
+          <Button colorPalette="green" type="submit" loading={isLoading}>
+            ثبت کاربر
+          </Button>
+        </Stack>
+      </form>
     </Box>
   );
 }

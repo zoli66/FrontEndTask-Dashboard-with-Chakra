@@ -1,23 +1,34 @@
 import { MdDelete } from "react-icons/md";
 import type { RenderType } from "../../../components/common/DataTable/DataTable";
 import type { Product } from "../../../types/product";
-import { Flex, Icon } from "@chakra-ui/react";
+import { Button, Flex, Icon, Link } from "@chakra-ui/react";
 import { FaEdit } from "react-icons/fa";
 
 export const productColumnRender: RenderType<Product> = {
   action: {
     renderColumn: (item, actions) => (
       <Flex gap={4}>
-        <button>
+        <Button
+          variant="ghost"
+          colorPalette="transparent"
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            actions.deleteProduct(item.id);
+          }}
+        >
           <Icon size="lg" color="red.500">
             <MdDelete />
           </Icon>
-        </button>
-        <button>
+        </Button>
+        <Link
+          href={`/product/edit/${item.id}`}
+          onClick={(e) => e.stopPropagation()}
+        >
           <Icon size="lg" color="blue.500">
             <FaEdit />
           </Icon>
-        </button>
+        </Link>
       </Flex>
     ),
     columnHeaderRender: () => <span>عملیات</span>,

@@ -17,9 +17,9 @@ function App() {
         <Route path="/" element={<DashboardLayout />}>
           <Route path="/" element={<DashboardPage />} />
           <Route path="users" element={<UsersPage />} />
-          <Route path="user" element={<UserPage />} />
+          <Route path="user/:mode/:userId?" element={<UserPage />} />
           <Route path="products" element={<ProductsPage />} />
-          <Route path="product" element={<ProductPage />} />
+          <Route path="product/:mode/:productId?" element={<ProductPage />} />
         </Route>
       </Route>
     </Routes>

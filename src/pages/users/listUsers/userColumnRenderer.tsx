@@ -23,7 +23,6 @@ export const userColumnRender: RenderType<User> = {
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
-            actions.deleteUser(item.id);
           }}
         >
           <Icon size="lg" color="blue.500">
