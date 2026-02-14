@@ -24,7 +24,7 @@ const DataTable = <T extends { id: number }>(props: Propstype<T>) => {
           {columns?.map((colKey) => {
             const columnHeaderRender = render[colKey]?.["columnHeaderRender"];
             return (
-              <Table.ColumnHeader key={colKey}>
+              <Table.ColumnHeader textAlign="center" key={colKey}>
                 {columnHeaderRender ? columnHeaderRender(colKey) : colKey}
               </Table.ColumnHeader>
             );

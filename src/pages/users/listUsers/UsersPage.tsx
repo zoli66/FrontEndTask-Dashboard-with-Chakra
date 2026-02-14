@@ -30,7 +30,7 @@ function UsersPage() {
 
   return (
     <>
-      <AddFavButton to="/user" />
+      <AddFavButton to="/user/add" />
       {data && (
         <DataTable
           data={data.users}

@@ -20,6 +20,7 @@ import {
 } from "../../../services/api/productsApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { toaster } from "../../../components/ui/toaster";
 
 function ProductPage() {
   const { mode, productId } = useParams();
@@ -55,7 +56,13 @@ function ProductPage() {
         ? await updateProduct({ id: Number(productId), ...data }).unwrap()
         : await createProduct(data).unwrap();
 
-      console.log(res);
+      toaster.create({
+        title: "موفقیت آمیز...",
+        description: `محصول با موفقیت ${isEditing ? "ویرایش" : "ثبت"} شد`,
+        type: "success",
+        closable: true,
+        duration: 5000,
+      });
       navigate("/products");
     } catch (error) {
       console.error(error);

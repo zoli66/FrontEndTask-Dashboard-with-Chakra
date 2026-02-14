@@ -1,5 +1,9 @@
 import { FormSchema, type UserFormValues } from "../../../types/user";
-import { useCreateUserMutation } from "../../../services/api/usersApi";
+import {
+  useCreateUserMutation,
+  useGetUserByIdQuery,
+  useUpdateUserMutation,
+} from "../../../services/api/usersApi";
 import {
   Box,
   Button,
@@ -11,28 +15,52 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { toaster } from "../../../components/ui/toaster";
 
 function UserPage() {
+  const { mode, userId } = useParams();
+  const isEditing = mode === "edit";
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    resetField,
+    reset,
   } = useForm<UserFormValues>({
     resolver: zodResolver(FormSchema),
   });
 
   const [createUser, { isLoading }] = useCreateUserMutation();
+  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
+  const { data: user, isFetching } = useGetUserByIdQuery(Number(userId), {
+    skip: !isEditing,
+  });
+
+  useEffect(() => {
+    if (isEditing && user) {
+      reset(user);
+    }
+  }, [user, isEditing, reset]);
 
   const onSubmit = async (data: UserFormValues) => {
     try {
-      const res = await createUser(data).unwrap();
-      resetField("firstName");
-      resetField("lastName");
-      resetField("username");
-      resetField("email");
-      resetField("gender");
+      const res = isEditing
+        ? await updateUser({ id: Number(userId), ...data }).unwrap()
+        : await createUser(data).unwrap();
+
+      toaster.create({
+        title: "موفقیت آمیز!",
+        description: `کاربر با موفقیت ${isEditing ? "ویرایش" : "ثبت"} شد`,
+        type: "success",
+        closable: true,
+        duration: 5000,
+      });
+      reset();
       console.log(res);
+
+      navigate("/users");
     } catch (error) {
       console.error(error);
     }
@@ -40,7 +68,7 @@ function UserPage() {
 
   return (
     <Box maxW="500px" mx="auto" mt={10} p={6} boxShadow="lg" borderRadius="lg">
-      <Heading mb={6}>ثبت کاربر</Heading>
+      <Heading mb={6}>{isEditing ? "ویرایش کاربر" : "ثبت کاربر"}</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack gap={4}>
           {/* Name */}
@@ -82,8 +110,12 @@ function UserPage() {
             </NativeSelect.Root>
             <Field.ErrorText>{errors.gender?.message}</Field.ErrorText>
           </Field.Root>
-          <Button colorPalette="green" type="submit" loading={isLoading}>
-            ثبت کاربر
+          <Button
+            colorPalette="green"
+            type="submit"
+            loading={isEditing ? isUpdating : isLoading}
+          >
+            {isEditing ? "ویرایش کاربر" : "ثبت کاربر"}
           </Button>
         </Stack>
       </form>

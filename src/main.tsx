@@ -7,11 +7,13 @@ import { system } from "./theme/index.ts";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
+import { Toaster } from "./components/ui/toaster.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <ChakraProvider value={system}>
+        <Toaster />
         <BrowserRouter>
           <App />
         </BrowserRouter>

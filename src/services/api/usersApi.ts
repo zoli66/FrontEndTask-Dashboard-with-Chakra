@@ -29,7 +29,7 @@ export const usersApi = baseApi.injectEndpoints({
         }),
 
         updateUser: builder.mutation<User, {id:number} & Partial<User>>({
-            query: (id , ...body) => ({
+            query: ({id , ...body}) => ({
                 url: `/users/${id}`,
                 method: "PUT",
                 body,
