@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   useCreateProductMutation,
   useGetProductByIdQuery,
+  useGetProductsCategoriesQuery,
   useUpdateProductMutation,
 } from "../../../services/api/productsApi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -43,6 +44,7 @@ function ProductPage() {
       skip: !isEditing,
     },
   );
+  const { data: categories } = useGetProductsCategoriesQuery();
 
   useEffect(() => {
     if (isEditing && product) {
@@ -94,11 +96,11 @@ function ProductPage() {
                 placeholder="انتخاب دسته بندی"
                 {...register("category")}
               >
-                <option value="beauty">زیبایی</option>
-                <option value="fragrances">عطر و ادکلن</option>
-                <option value="furniture">مبلمان</option>
-                <option value="groceries">مواد غذایی</option>
-                <option value="home-decoration">دکوراسیون منزل</option>
+                {categories?.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
               </NativeSelect.Field>
               <NativeSelect.Indicator />
             </NativeSelect.Root>

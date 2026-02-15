@@ -1,28 +1,65 @@
-import { Box, Text, VStack } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Box, Flex, Icon, Text, VStack } from "@chakra-ui/react";
+import { FiBox, FiHome, FiUsers } from "react-icons/fi";
+import { Link, useLocation } from "react-router-dom";
+
+const menuItems = [
+  { label: "Dashboard", path: "/", icon: FiHome },
+  { label: "Users", path: "/users", icon: FiUsers },
+  { label: "Products", path: "/products", icon: FiBox },
+];
 
 function Sidebar() {
+  const location = useLocation();
   return (
-    <Box w="240" bg="gray.900" color="white" p={4}>
-      <Text fontSize="lg" fontWeight="bold" mb={8}>
+    <Box
+      w="240px"
+      bg="gray.900"
+      color="gray.200"
+      p={5}
+      minH="100vh"
+      borderRight="1px solid"
+      borderColor="gray.800"
+    >
+      {/* Logo / Title */}
+      <Text
+        fontSize="xl"
+        fontWeight="bold"
+        mb={8}
+        color="white"
+        letterSpacing="wide"
+      >
         Admin Panel
       </Text>
       <VStack align="stretch" gap={2}>
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <Box px={3} py={2} _hover={{ bg: "gray.700" }} borderRadius="md">
-            Dashboard
-          </Box>
-        </Link>
-        <Link to="/users" style={{ textDecoration: "none" }}>
-          <Box px={3} py={2} _hover={{ bg: "gray.700" }} borderRadius="md">
-            Users
-          </Box>
-        </Link>
-        <Link to="/products" style={{ textDecoration: "none" }}>
-          <Box px={3} py={2} _hover={{ bg: "gray.700" }} borderRadius="md">
-            Products
-          </Box>
-        </Link>
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              style={{ textDecoration: "none" }}
+            >
+              <Flex
+                align="center"
+                px={4}
+                py={3}
+                borderRadius="lg"
+                transition="all 0.2s"
+                bg={isActive ? "blue.600" : "transparent"}
+                color={isActive ? "white" : "gray.300"}
+                _hover={{
+                  bg: isActive ? "blue.600" : "gray.800",
+                  color: "white",
+                }}
+              >
+                <Icon as={item.icon} boxSize={5} mr={3} />
+                <Text fontWeight={isActive ? "semibold" : "medium"}>
+                  {item.label}
+                </Text>
+              </Flex>
+            </Link>
+          );
+        })}
       </VStack>
     </Box>
   );

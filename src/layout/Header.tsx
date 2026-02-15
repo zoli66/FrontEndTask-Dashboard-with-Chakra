@@ -2,6 +2,7 @@ import { Avatar, Button, Flex, HStack, Text } from "@chakra-ui/react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logout } from "../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineLogout } from "react-icons/md";
 
 function Header() {
   const dispatch = useAppDispatch();
@@ -35,14 +36,15 @@ function Header() {
           </Avatar.Root>
         )}
         <Button
-          colorScheme="red"
-          size="sm"
+          variant="ghost"
+          size="md"
           onClick={() => {
             dispatch(logout());
             localStorage.removeItem("token");
             navigate("/login");
           }}
         >
+          <MdOutlineLogout />
           Logout
         </Button>
       </HStack>

@@ -16,6 +16,10 @@ export const productsApi = baseApi.injectEndpoints({
             query: (id) => `products/${id}`,
             providesTags: (result, error, id) => [{ type: "Products", id }],
         }),
+        getProductsCategories: builder.query<string[], void>({
+            query: () => "products/category-list",
+            providesTags: ["Products"],
+        }),
         createProduct: builder.mutation<Product, Partial<Product>>({
             query: (body) => ({
                 url: "/products/add",
@@ -45,6 +49,7 @@ export const productsApi = baseApi.injectEndpoints({
 export const {
     useGetProductsQuery,
     useGetProductByIdQuery,
+    useGetProductsCategoriesQuery,
     useCreateProductMutation,
     useUpdateProductMutation,
     useDeleteProductMutation,

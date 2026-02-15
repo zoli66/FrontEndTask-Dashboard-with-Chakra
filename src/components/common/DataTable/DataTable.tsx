@@ -7,15 +7,17 @@ export type RenderType<T> = {
   };
 };
 
-type Propstype<T> = {
+type Propstype<T, A = unknown> = {
   data: T[];
   render: RenderType<T>;
-  actions?: { [key: string]: any };
+  actions?: A;
   columns?: string[];
   onRowClick?: (rowData: T) => void;
 };
 
-const DataTable = <T extends { id: number }>(props: Propstype<T>) => {
+const DataTable = <T extends { id: number }, A = unknown>(
+  props: Propstype<T, A>,
+) => {
   const { data, render, actions, columns, onRowClick } = props;
   return (
     <Table.Root>
@@ -40,7 +42,7 @@ const DataTable = <T extends { id: number }>(props: Propstype<T>) => {
             {columns?.map((colKey) => {
               const renderFunc = render[colKey]?.["renderColumn"];
               return (
-                <Table.Cell key={colKey}>
+                <Table.Cell textAlign="center" key={colKey}>
                   {renderFunc
                     ? renderFunc(item, actions)
                     : String((item as any)[colKey] ?? "")}

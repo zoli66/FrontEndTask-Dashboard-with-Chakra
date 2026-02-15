@@ -7,46 +7,38 @@ import { toaster } from "../../../components/ui/toaster";
 
 export const productColumnRender: RenderType<Product> = {
   action: {
-    renderColumn: (item, actions) => (
-      <Flex gap={4}>
-        <Button
-          variant="ghost"
-          colorPalette="transparent"
-          onClick={async (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            try {
-              const res = await actions.deleteProduct(item.id).unwrap();
-              if (res.isDeleted) {
-                toaster.create({
-                  title: "موفقیت آمیز...",
-                  description: `محصول با شناسه ${res.id} با موفقیت حذف شد`,
-                  type: "success",
-                  closable: true,
-                  duration: 5000,
-                });
-              }
-            } catch (error) {
-              console.error(error);
-            }
-          }}
-        >
-          <Icon size="lg" color="red.500">
-            <MdDelete />
-          </Icon>
-        </Button>
-        <Button asChild variant="ghost">
-          <Link
-            href={`/product/edit/${item.id}`}
-            onClick={(e) => e.stopPropagation()}
+    renderColumn: (item, actions) => {
+      const typedActions = actions as {
+        onDelete: (product: Product) => void;
+      };
+      return (
+        <Flex gap={4}>
+          <Button
+            variant="ghost"
+            colorPalette="transparent"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              typedActions.onDelete(item);
+            }}
           >
-            <Icon size="lg" color="blue.500">
-              <FaEdit />
+            <Icon size="lg" color="red.500">
+              <MdDelete />
             </Icon>
-          </Link>
-        </Button>
-      </Flex>
-    ),
+          </Button>
+          <Button asChild variant="ghost">
+            <Link
+              href={`/product/edit/${item.id}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Icon size="lg" color="blue.500">
+                <FaEdit />
+              </Icon>
+            </Link>
+          </Button>
+        </Flex>
+      );
+    },
     columnHeaderRender: () => <span>عملیات</span>,
   },
   id: {
