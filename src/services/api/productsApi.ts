@@ -8,8 +8,8 @@ interface ProductsResponse {
 
 export const productsApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getProducts: builder.query<ProductsResponse, void>({
-            query: () => "products",
+        getProducts: builder.query<ProductsResponse, {limit?: number, skip?:number}>({
+            query: ({limit = 10, skip = 0}) => `products?limit=${limit}&skip=${skip}`,
             providesTags: ["Products"],
         }),
         getProductById: builder.query<Product, number>({
@@ -42,7 +42,11 @@ export const productsApi = baseApi.injectEndpoints({
                 method: "DELETE",
             }),
             invalidatesTags: ["Products"],
-        })
+        }),
+        searchProducts: builder.query<ProductsResponse, string>({
+            query: (search) => `products/search?q=${search}`,
+            providesTags: ["Products"],
+        }),
     })
 })
 
@@ -53,4 +57,5 @@ export const {
     useCreateProductMutation,
     useUpdateProductMutation,
     useDeleteProductMutation,
+    useSearchProductsQuery,
  } = productsApi;

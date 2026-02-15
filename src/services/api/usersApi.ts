@@ -44,6 +44,11 @@ export const usersApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["Users"],
         }),
+
+        searchUsers: builder.query<UsersResponse, string>({
+            query: (search) => `users/search?q=${search}`,
+            providesTags: ["Users"],
+        }),
     }),
 });
 
@@ -53,4 +58,5 @@ export const {
     useCreateUserMutation,
     useUpdateUserMutation,
     useDeleteUserMutation,
+    useSearchUsersQuery,
 } = usersApi;

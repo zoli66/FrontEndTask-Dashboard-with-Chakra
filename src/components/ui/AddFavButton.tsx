@@ -17,7 +17,7 @@ function AddFavButton({ to }: { to?: string }) {
         // Fixed position
         position="fixed"
         bottom="10"
-        right="10"
+        left="10"
         zIndex="sticky"
         _hover={{ transform: "scale(1.1)" }}
       >

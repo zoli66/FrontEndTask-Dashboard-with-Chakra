@@ -1,18 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DataTable from "../../../components/common/DataTable/DataTable";
 import {
   useDeleteProductMutation,
   useGetProductsQuery,
+  useSearchProductsQuery,
 } from "../../../services/api/productsApi";
 import type { Product } from "../../../types/product";
 import { productColumnRender } from "./productColumnRender";
 import AddFavButton from "../../../components/ui/AddFavButton";
-import { Spinner } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, Spinner } from "@chakra-ui/react";
 import ConfirmDialog from "../../../components/common/ConfirmDialog";
 import { toaster } from "../../../components/ui/toaster";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 function ProductsPage() {
-  const { data, isLoading } = useGetProductsQuery();
+  const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [debouncedSearch, setDebouncesdSearch] = useState<string>("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncesdSearch(search);
+      setPage(1);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const isSearching = debouncedSearch.length >= 2;
+
+  const { data: productsData, isLoading: isProductsLoading } =
+    useGetProductsQuery(
+      isSearching ? skipToken : { limit: 10, skip: (page - 1) * 10 },
+    );
+
+  const { data: searchData, isLoading: isSearchLoading } =
+    useSearchProductsQuery(isSearching ? debouncedSearch : skipToken);
+
+  const products = isSearching
+    ? (searchData?.products ?? [])
+    : (productsData?.products ?? []);
+
+  const total = isSearching
+    ? (searchData?.total ?? 0)
+    : (productsData?.total ?? 0);
+
+  const totalPages = Math.ceil(total / 10);
   const [deleteProduct] = useDeleteProductMutation();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [open, setOpen] = useState(false);
@@ -23,7 +55,7 @@ function ProductsPage() {
     "price",
     "action",
   ]);
-  if (isLoading)
+  if (isProductsLoading || isSearchLoading)
     return (
       <div
         style={{
@@ -52,14 +84,46 @@ function ProductsPage() {
   return (
     <>
       <AddFavButton to="/product/add" />
-      {data && (
+      <Box mb={4}>
+        <Input
+          placeholder="جستجوی محصول"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </Box>
+      {products && (
         <DataTable
-          data={data?.products}
+          data={products}
           render={productColumnRender}
           actions={actions}
           columns={productColumns}
           onRowClick={onRowClick}
         />
+      )}
+
+      {/* Pagination */}
+      {!isSearching && totalPages > 1 && (
+        <Flex mt={4} gap={2} justify="center">
+          <Button
+            size="sm"
+            onClick={() => setPage((p) => p - 1)}
+            disabled={page === 1}
+          >
+            قبلی
+          </Button>
+
+          <Box px={3} py={1}>
+            {page} / {totalPages}
+          </Box>
+
+          <Button
+            size="sm"
+            onClick={() => setPage((p) => p + 1)}
+            disabled={page === totalPages}
+          >
+            بعدی
+          </Button>
+        </Flex>
       )}
       {/* Dialog For Confirm Delete Product */}
       <ConfirmDialog

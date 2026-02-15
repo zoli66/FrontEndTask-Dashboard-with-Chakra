@@ -8,7 +8,7 @@ import { useGetProductsQuery } from "../../services/api/productsApi";
 function DashboardPage() {
   const { data: usersData, isLoading: usersLoading } = useGetUsersQuery({});
   const { data: productsData, isLoading: productsLoading } =
-    useGetProductsQuery();
+    useGetProductsQuery({});
 
   if (usersLoading || productsLoading) {
     return (

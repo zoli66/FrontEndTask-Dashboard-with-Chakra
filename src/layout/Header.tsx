@@ -23,7 +23,7 @@ function Header() {
     >
       {/*عنوان صفحه*/}
       <Text fontWeight="bold" fontSize="lg">
-        Dashboard
+        داشبورد
       </Text>
 
       {/*بخش کاربر*/}
@@ -45,7 +45,7 @@ function Header() {
           }}
         >
           <MdOutlineLogout />
-          Logout
+          خروج
         </Button>
       </HStack>
     </Flex>

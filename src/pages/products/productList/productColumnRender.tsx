@@ -3,7 +3,6 @@ import type { RenderType } from "../../../components/common/DataTable/DataTable"
 import type { Product } from "../../../types/product";
 import { Button, Flex, Icon, Link } from "@chakra-ui/react";
 import { FaEdit } from "react-icons/fa";
-import { toaster } from "../../../components/ui/toaster";
 
 export const productColumnRender: RenderType<Product> = {
   action: {
