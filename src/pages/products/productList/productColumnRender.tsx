@@ -11,7 +11,7 @@ export const productColumnRender: RenderType<Product> = {
         onDelete: (product: Product) => void;
       };
       return (
-        <Flex gap={4}>
+        <Flex gap={4} justifyContent="center">
           <Button
             variant="ghost"
             colorPalette="transparent"

@@ -8,10 +8,18 @@ import {
 import { userColumnRender } from "./userColumnRenderer";
 import type { User } from "../../../types/user";
 import AddFavButton from "../../../components/ui/AddFavButton";
-import { Box, Button, Flex, Input, Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Input,
+  InputGroup,
+  Spinner,
+} from "@chakra-ui/react";
 import ConfirmDialog from "../../../components/common/ConfirmDialog";
 import { toaster } from "../../../components/ui/toaster";
 import { skipToken } from "@reduxjs/toolkit/query";
+import { FaSearch } from "react-icons/fa";
 
 function UsersPage() {
   const [search, setSearch] = useState("");
@@ -81,11 +89,13 @@ function UsersPage() {
     <>
       <AddFavButton to="/user/add" />
       <Box mb={4}>
-        <Input
-          placeholder="جستجوی کاربر"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <InputGroup startElement={<FaSearch />}>
+          <Input
+            placeholder="جستجوی کاربر"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </InputGroup>
       </Box>
       {users && (
         <DataTable

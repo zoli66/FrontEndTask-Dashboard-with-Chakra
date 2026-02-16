@@ -11,7 +11,7 @@ export const userColumnRender: RenderType<User> = {
         onDelete: (user: User) => void;
       };
       return (
-        <Flex gap={4}>
+        <Flex gap={4} justifyContent="center">
           <Button
             variant="ghost"
             onClick={(e) => {
